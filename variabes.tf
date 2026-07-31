@@ -1,13 +1,3 @@
-variable "subscription_id" {
-  type        = string
-  description = "Subscription ID for the Azure resources"
-}
-
-variable "tenant_id" {
-  type        = string
-  description = "Tenant ID for the Azure resources"
-}
-
 variable "default_location" {
   type        = string
   description = "Default location for resources if not explicitly defined"
