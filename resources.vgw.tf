@@ -45,8 +45,8 @@ module "virtual_network_gateway" {
 
   enable_telemetry = false
 
-  parent_id                         = var.resource_groups["${each.value.location}-network"]
-  virtual_network_gateway_subnet_id = "${var.virtual_networks["${each.value.location}-hub"]}/subnets/GatewaySubnet"
+  parent_id                         = var.resource_groups["${each.value.location}-network"].resource_id
+  virtual_network_gateway_subnet_id = "${var.virtual_networks["${each.value.location}-hub"].resource_id}/subnets/GatewaySubnet"
   subnet_creation_enabled           = false
   location                          = each.value.location
   name                              = each.value.name

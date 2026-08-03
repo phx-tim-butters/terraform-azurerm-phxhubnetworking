@@ -156,16 +156,28 @@ module "hub_networking" {
   local_network_gateways   = local.local_network_gateways
 
   resource_groups = {
-    "uksouth-network" = azurerm_resource_group.example.id
+    "uksouth-network" = {
+      resource_name = "network"
+      location      = "uksouth"
+      resource_id   = azurerm_resource_group.example.id
+    }
   }
 
   virtual_networks = {
-    "uksouth-hub"   = azurerm_virtual_network.example_hub.id
-    "uksouth-spoke" = azurerm_virtual_network.example_spoke.id
+    "uksouth-hub" = {
+      resource_name = "hub"
+      location      = "uksouth"
+      resource_id   = azurerm_virtual_network.example_hub.id
+    }
+    "uksouth-spoke" = {
+      resource_name = "spoke"
+      location      = "uksouth"
+      resource_id   = azurerm_virtual_network.example_spoke.id
+    }
   }
 
   depends_on = [
     azurerm_subnet.example_hub_gateway,
-    azurerm_subnet.example_hub_gateway
+    azurerm_subnet.example_spoke
   ]
 }

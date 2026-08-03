@@ -19,7 +19,7 @@ module "vwan" {
     virtual_wan = {
       name                           = module.naming["virtual_wan-${each.value.location}-${each.value.resource_name}"].name
       location                       = each.value.location
-      resource_group_name            = element(split("/", var.resource_groups["${each.value.location}-network"]), -1)
+      resource_group_name            = var.resource_groups["${each.value.location}-network"].resource_name
       type                           = "Standard"
       allow_branch_to_branch_traffic = true
       disable_vpn_encryption         = false
@@ -42,7 +42,7 @@ module "vwan" {
       }
 
       location          = hub.location
-      default_parent_id = var.resource_groups["${each.value.location}-network"]
+      default_parent_id = var.resource_groups["${each.value.location}-network"].resource_id
 
       hub = {
         name           = hub.resource_name

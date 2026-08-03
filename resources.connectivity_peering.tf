@@ -4,8 +4,8 @@ locals {
 
   hub_peering_map = { for k, v in var.virtual_networks : k => {
 
-    outbound_name             = "${v.location}_${v.resource_name}-to-hub"
-    inbound_name              = "hub-to-${v.location}_${v.resource_name}"
+    outbound_name             = "${k}-to-hub"
+    inbound_name              = "hub-to-${k}"
     parent_id                 = v.resource_id
     remote_virtual_network_id = var.network_topology_details.hub_id[v.location]
 
