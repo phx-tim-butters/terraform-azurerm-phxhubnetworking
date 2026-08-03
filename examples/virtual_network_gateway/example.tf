@@ -160,15 +160,12 @@ module "hub_networking" {
   }
 
   virtual_networks = {
-    "uksouth-hub" = {
-      resource_id   = azurerm_virtual_network.example_hub.id
-      location      = "uksouth"
-      resource_name = "hub"
-    },
-    "uksouth-spoke" = {
-      resource_id   = azurerm_virtual_network.example_spoke.id
-      location      = "uksouth"
-      resource_name = "spoke"
-    }
+    "uksouth-hub"   = azurerm_virtual_network.example_hub.id
+    "uksouth-spoke" = azurerm_virtual_network.example_spoke.id
   }
+
+  depends_on = [
+    azurerm_subnet.example_hub_gateway,
+    azurerm_subnet.example_hub_gateway
+  ]
 }

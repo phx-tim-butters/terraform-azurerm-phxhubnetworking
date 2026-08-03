@@ -39,7 +39,7 @@ variable "resource_groups" {
 
 variable "virtual_networks" {
   description = "Map of already provisioned virtual networks for connectivity that, as part of this module call, need to be connected to either the vwan or the hub network (after gateway creation)"
-  type        = map(any)
+  type        = map(string)
   default     = {}
 }
 
