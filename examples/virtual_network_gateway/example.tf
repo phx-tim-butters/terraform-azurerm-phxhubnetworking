@@ -33,9 +33,11 @@ locals {
   structure             = "TYPE-ORG-REGION-WORK-NAME"
   workload_abbreviation = "con"
 
-  resource_group_name           = "hub_networking-example"
-  virtual_network_name          = "hub_networking-example"
-  virtual_network_address_space = "10.0.0.0/16"
+  resource_group_name                 = "hub_networking-example"
+  hub_virtual_network_name            = "hub_networking-example-hub"
+  spoke_virtual_network_name          = "hub_networking-example-spoke"
+  hub_virtual_network_address_space   = "10.0.0.0/16"
+  spoke_virtual_network_address_space = "10.1.0.0/16"
 
   tags = {}
 
@@ -99,23 +101,39 @@ resource "azurerm_resource_group" "example" {
   tags = local.tags
 }
 
-resource "azurerm_virtual_network" "example" {
-  name                = local.virtual_network_name
+resource "azurerm_virtual_network" "example_hub" {
+  name                = local.hub_virtual_network_name
   location            = local.default_location
   resource_group_name = azurerm_resource_group.example.name
 
-  address_space = [local.virtual_network_address_space]
+  address_space = [local.hub_virtual_network_address_space]
 
   tags = local.tags
 }
 
-resource "azurerm_subnet" "example" {
+resource "azurerm_virtual_network" "example_spoke" {
+  name                = local.spoke_virtual_network_name
+  location            = local.default_location
+  resource_group_name = azurerm_resource_group.example.name
+
+  address_space = [local.spoke_virtual_network_address_space]
+
+  tags = local.tags
+}
+
+resource "azurerm_subnet" "example_hub_gateway" {
   name                 = "GatewaySubnet"
   resource_group_name  = azurerm_resource_group.example.name
-  virtual_network_name = azurerm_virtual_network.example.name
+  virtual_network_name = azurerm_virtual_network.example_hub.name
   address_prefixes     = ["10.0.1.0/24"]
 }
 
+resource "azurerm_subnet" "example_spoke" {
+  name                 = "subnet1"
+  resource_group_name  = azurerm_resource_group.example.name
+  virtual_network_name = azurerm_virtual_network.example_spoke.name
+  address_prefixes     = ["10.0.1.0/24"]
+}
 
 module "hub_networking" {
   source = "../../"
@@ -129,6 +147,9 @@ module "hub_networking" {
   network_topology_details = {
     create_gateways = true
     network_type    = "Vnet-gw"
+    hub_id = {
+      uksouth = azurerm_virtual_network.example_hub.id
+    }
   }
 
   virtual_network_gateways = local.virtual_network_gateways
@@ -138,13 +159,16 @@ module "hub_networking" {
     "uksouth-network" = azurerm_resource_group.example.id
   }
 
-  hub_virtual_networks = {
-    "uksouth-hub" = azurerm_virtual_network.example.id
+  virtual_networks = {
+    "uksouth-hub" = {
+      resource_id   = azurerm_virtual_network.example_hub.id
+      location      = "uksouth"
+      resource_name = "hub"
+    },
+    "uksouth-spoke" = {
+      resource_id   = azurerm_virtual_network.example_spoke.id
+      location      = "uksouth"
+      resource_name = "spoke"
+    }
   }
-
-  depends_on = [
-    azurerm_resource_group.example,
-    azurerm_virtual_network.example,
-    azurerm_subnet.example
-  ]
 }

@@ -33,13 +33,13 @@ variable "network_topology_details" {
 }
 
 variable "resource_groups" {
-  description = "Map of resource groups for connectivity"
+  description = "Map of already provisioned resource groups for connectivity"
   type        = map(string)
 }
 
-variable "hub_virtual_networks" {
-  description = "Map of hub virtual networks for connectivity"
-  type        = map(string)
+variable "virtual_networks" {
+  description = "Map of already provisioned virtual networks for connectivity that, as part of this module call, need to be connected to either the vwan or the hub network (after gateway creation)"
+  type        = map(any)
   default     = {}
 }
 

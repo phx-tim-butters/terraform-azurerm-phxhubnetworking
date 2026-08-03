@@ -7,6 +7,8 @@ locals {
       {
         resource_type             = "virtual_network_gateway"
         resource_group_short_name = "${v.location}-network"
+        workload_abbreviation     = try(v.workload_abbreviation, var.workload_abbreviation)
+        archetype                 = try(v.archetype, var.archetype)
       })
     }
     ,
@@ -16,6 +18,8 @@ locals {
       {
         resource_type             = "local_network_gateway"
         resource_group_short_name = "${v.location}-network"
+        workload_abbreviation     = try(v.workload_abbreviation, var.workload_abbreviation)
+        archetype                 = try(v.archetype, var.archetype)
       })
     }
     ,
@@ -25,6 +29,8 @@ locals {
       {
         resource_type             = "virtual_wan"
         resource_group_short_name = "${v.location}-network"
+        workload_abbreviation     = try(v.workload_abbreviation, var.workload_abbreviation)
+        archetype                 = try(v.archetype, var.archetype)
       })
     }
   )
