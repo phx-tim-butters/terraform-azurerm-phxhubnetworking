@@ -31,12 +31,12 @@ module "vwan" {
     for region, hub in each.value.virtual_hubs : hub.resource_name => {
 
       enabled_resources = {
-        firewall                              = false
-        firewall_policy                       = false
-        bastion                               = false
-        private_dns_zones                     = false
-        private_dns_resolver                  = false
-        sidecar_virtual_network               = false
+        firewall                              = try(hub.enabled_resources.firewall, false)
+        firewall_policy                       = try(hub.enabled_resources.firewall_policy, false)
+        bastion                               = try(hub.enabled_resources.bastion, false)
+        private_dns_zones                     = try(hub.enabled_resources.private_dns_zones, false)
+        private_dns_resolver                  = try(hub.enabled_resources.private_dns_resolver, false)
+        sidecar_virtual_network               = try(hub.enabled_resources.sidecar_virtual_network, false)
         virtual_network_gateway_vpn           = length(hub.vpn_gw) > 0 ? true : false
         virtual_network_gateway_express_route = length(hub.er_gw) > 0 ? true : false
       }

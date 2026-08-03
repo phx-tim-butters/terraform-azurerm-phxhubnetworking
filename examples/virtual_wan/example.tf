@@ -51,7 +51,7 @@ locals {
           resource_name          = "hub-uksouth"
           address_prefix         = "10.0.0.0/23"
           location               = "uksouth"
-          routing_intent_enabled = false
+          routing_intent_enabled = true
           er_gw                  = {}
           vpn_gw                 = {}
           tags                   = {}
@@ -76,8 +76,7 @@ locals {
         }
       }
 
-      tags = {
-      }
+      tags = {}
     }
   }
 }
@@ -92,9 +91,6 @@ resource "azurerm_resource_group" "example" {
 module "hub_networking" {
   source = "../../"
 
-  tenant_id       = var.tenant_id
-  subscription_id = var.subscription_id
-
   org_abbreviation      = local.org_abbreviation
   structure             = local.structure
   workload_abbreviation = local.workload_abbreviation
@@ -102,9 +98,9 @@ module "hub_networking" {
   default_location = local.default_location
 
   network_topology_details = {
+    network_type    = "Vwan"
     create_gateways = true
     create_vwan     = true
-    network_type    = "Vwan"
   }
 
   virtual_wans = local.virtual_wans
@@ -119,4 +115,12 @@ module "hub_networking" {
   depends_on = [
     azurerm_resource_group.example
   ]
+}
+
+output "virtual_wan_resource_ids" {
+  value = try(module.hub_networking.virtual_wan_resource_ids, {})
+}
+
+output "virtual_wan_hubs" {
+  value = try(module.hub_networking.virtual_wan_hubs, {})
 }

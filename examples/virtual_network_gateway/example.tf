@@ -120,9 +120,6 @@ resource "azurerm_subnet" "example" {
 module "hub_networking" {
   source = "../../"
 
-  tenant_id       = var.tenant_id
-  subscription_id = var.subscription_id
-
   org_abbreviation      = local.org_abbreviation
   structure             = local.structure
   workload_abbreviation = local.workload_abbreviation
