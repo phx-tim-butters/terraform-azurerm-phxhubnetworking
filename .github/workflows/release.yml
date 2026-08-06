@@ -26,6 +26,9 @@ concurrency:
 
 jobs:
   release:
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      !startsWith(github.event.head_commit.message, 'Merge branch')
     runs-on: ubuntu-latest
 
     steps:
