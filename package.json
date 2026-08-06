@@ -1,0 +1,27 @@
+{
+  "name": "terraform-azurerm-hubnetworking",
+  "version": "1.0.0",
+  "description": "Terraform module to provision hub networking components for an enterprise platform landing zone.",
+  "main": "index.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phx-tim-butters/terraform-azurerm-hubnetworking.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/phx-tim-butters/terraform-azurerm-hubnetworking/issues"
+  },
+  "homepage": "https://github.com/phx-tim-butters/terraform-azurerm-hubnetworking#readme",
+  "devDependencies": {
+    "release-it": "^21.0.1"
+  }
+}
