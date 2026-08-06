@@ -56,6 +56,11 @@ jobs:
             echo "value=patch" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Configure Git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
       - name: Create release
         env:
           GITHUB_TOKEN: ${{ github.token }}
