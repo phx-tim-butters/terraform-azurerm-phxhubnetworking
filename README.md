@@ -9,7 +9,7 @@ This module is a wrapper around Azure Verified Modules (AVM) and supports two mu
 
 The module is integrated with the Phoenix naming module (`phx-tim-butters/phxnaming/azurerm`) to ensure consistent naming across all deployed resources.
 
-## Architecture Intent
+##  Intent
 
 Use this module when you want a consistent, enterprise-scale entry point for hub networking that:
 
