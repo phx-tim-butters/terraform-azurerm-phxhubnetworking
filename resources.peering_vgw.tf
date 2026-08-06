@@ -2,7 +2,7 @@ locals {
 
   hub_virtual_network_gateway_used = var.network_topology_details.network_type == "Vnet-gw" ? (var.network_topology_details.create_gateways ? true : false) : false
 
-  hub_peering_map = { for k, v in var.virtual_networks : k => {
+  hub_peering_map = local.create_vgw ? { for k, v in var.virtual_networks : k => {
 
     outbound_name             = "${k}-to-hub"
     inbound_name              = "hub-to-${k}"
@@ -12,7 +12,7 @@ locals {
     allow_forwarded_traffic      = true
     allow_virtual_network_access = true
 
-  } if !strcontains(k, "hub") }
+  } if !strcontains(k, "hub") } : {}
 }
 
 module "peering_to_hub" {

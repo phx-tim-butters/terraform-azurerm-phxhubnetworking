@@ -50,6 +50,28 @@ module "vwan" {
         tags           = each.value.tags
       }
 
+      virtual_network_connections = {
+        for vnet_key, vnet in var.virtual_networks : vnet_key => {
+          name                      = "${vnet_key}-to-${vnet.location}-vwan"
+          remote_virtual_network_id = vnet.resource_id
+          internet_security_enabled = lookup(vnet, "internet_security_enabled", true)
+
+          routing = lookup(vnet, "routing", null) == null ? null : {
+            associated_route_table_id = vnet.routing.associated_route_table_id
+            propagated_route_table = lookup(vnet.routing, "propagated_route_table", null) == null ? null : {
+              route_table_ids = lookup(vnet.routing.propagated_route_table, "route_table_ids", [])
+              labels          = lookup(vnet.routing.propagated_route_table, "labels", [])
+            }
+
+            static_vnet_route = lookup(vnet.routing, "static_vnet_route", null) == null ? null : {
+              name                = lookup(vnet.routing.static_vnet_route, "name", null)
+              address_prefixes    = lookup(vnet.routing.static_vnet_route, "address_prefixes", [])
+              next_hop_ip_address = lookup(vnet.routing.static_vnet_route, "next_hop_ip_address", null)
+            }
+          }
+        } if vnet.location == hub.location
+      }
+
       virtual_network_gateways = {
         express_route = length(hub.er_gw) > 0 ? {
           scale_units = hub.er_gw.scale_units
@@ -64,8 +86,8 @@ module "vwan" {
             asn = hub.vpn_gw.bgp_settings.asn
           }
         } : {}
-
       }
+
       tags = try(each.value.tags, {})
     }
   }

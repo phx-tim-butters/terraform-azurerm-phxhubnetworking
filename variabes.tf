@@ -17,8 +17,7 @@ variable "network_topology_details" {
     create_vwan                   = optional(bool, false)
     hub_peering_enabled           = optional(bool, true)
     hub_id                        = optional(map(string), {})
-    vwan_hub_id                   = optional(map(string), {})
-    vwan_routing_intent_enabled   = optional(bool, false)
+    virtual_wan_hubs              = optional(map(any), {})
     bastion_subnet_address_spaces = optional(list(string), [])
   })
   default = {
@@ -26,21 +25,28 @@ variable "network_topology_details" {
     create_gateways               = false
     create_vwan                   = false
     hub_id                        = {}
-    vwan_hub_id                   = {}
-    vwan_routing_intent_enabled   = false
+    virtual_wan_hubs              = {}
     bastion_subnet_address_spaces = []
   }
 }
 
 variable "resource_groups" {
-  description = "Map of already provisioned resource groups for connectivity"
-  type        = map(any)
+  description = "Map of already provisioned Resource Groups for use to create Network Hub connectivity resources within."
+  type = map(object({
+    resource_name = string
+    location      = string
+    resource_id   = string
+  }))
 }
 
 variable "virtual_networks" {
-  description = "Map of already provisioned virtual networks for connectivity that, as part of this module call, need to be connected to either the vwan or the hub network (after gateway creation)"
-  type        = map(any)
-  default     = {}
+  description = "Map of already provisioned Virtual Networks for use to create Network Hub connectivity resources within - and also to create the peering connections between the hub and spoke networks that MAY well be in the same archetype as the Connectivity"
+  type = map(object({
+    resource_name = string
+    location      = string
+    resource_id   = string
+  }))
+  default = {}
 }
 
 variable "virtual_wans" {

@@ -1,25 +1,23 @@
 locals {
+
+  create_vgw = var.network_topology_details.network_type == "Vnet-gw" ? var.network_topology_details.create_gateways : false // Check to see if we need a vpn gw, if vnet is Vnet-gw then yes - but check the override flag (create_vnet_gw) regardless
+
   // Create the VPG and LGW resource maps for creation. Only create if the hub_networking_details.network_type is Vnet-gw and the create_gateways flag is set to true. Otherwise, return an empty map.
+  local_network_gateways = local.create_vgw ? { for k, v in var.local_network_gateways :
+    k =>
+    merge(v, {
+      name       = module.naming["local_network_gateway-${v.location}-${v.resource_name}"].name
+      connection = merge(v.connection, { shared_key = v.connection.generate_psk ? random_password.lgw[v.name].result : v.connection.shared_key })
+    })
+  } : {}
 
-  local_network_gateways = var.network_topology_details.network_type == "Vnet-gw" ? (var.network_topology_details.create_gateways ?
-    { for k, v in var.local_network_gateways :
-      k =>
-      merge(v, {
-        name       = module.naming["local_network_gateway-${v.location}-${v.resource_name}"].name
-        connection = merge(v.connection, { shared_key = v.connection.generate_psk ? random_password.lgw[v.name].result : v.connection.shared_key })
-      })
-    }
-  : {}) : {}
-
-  virtual_network_gateways = var.network_topology_details.network_type == "Vnet-gw" ? (var.network_topology_details.create_gateways ?
-    { for k, v in var.virtual_network_gateways :
-      k =>
-      merge(v, {
-        name              = module.naming["virtual_network_gateway-${v.location}-${v.resource_name}"].name
-        ip_configurations = v.active_active_enabled ? (length(try(v.vpn_point_to_site, {})) > 0 ? 3 : 2) : (length(try(v.vpn_point_to_site, {})) > 0 ? 2 : 1)
-      })
-    }
-  : {}) : {}
+  virtual_network_gateways = local.create_vgw ? { for k, v in var.virtual_network_gateways :
+    k =>
+    merge(v, {
+      name              = module.naming["virtual_network_gateway-${v.location}-${v.resource_name}"].name
+      ip_configurations = v.active_active_enabled ? (length(try(v.vpn_point_to_site, {})) > 0 ? 3 : 2) : (length(try(v.vpn_point_to_site, {})) > 0 ? 2 : 1)
+    })
+  } : {}
 }
 
 # Create any PSK as required
