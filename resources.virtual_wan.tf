@@ -76,7 +76,7 @@ module "vwan" {
         express_route = length(hub.er_gw) > 0 ? {
           scale_units = hub.er_gw.scale_units
           tags        = try(hub.er_gw.tags, each.value.tags)
-        } : {}
+        } : null
 
         vpn = length(hub.vpn_gw) > 0 ? {
           bgp_route_translation_for_nat_enabled = try(hub.vpn_gw.bgp_route_translation_for_nat_enabled, false)
@@ -85,7 +85,7 @@ module "vwan" {
           bgp_settings = {
             asn = hub.vpn_gw.bgp_settings.asn
           }
-        } : {}
+        } : null
       }
 
       tags = try(each.value.tags, {})
