@@ -37,19 +37,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Generate README.md with terraform-docs
-        uses: terraform-docs/gh-actions@main
-        with:
-          working-dir: .
-          output-file: README.md
-          output-method: inject
-          git-push: "true"
-          git-commit-message: "Update README.md on ${{ github.ref_name }} by ${{ github.actor }}"
-          git-push-user-name: ${{ github.actor }}
-          git-push-user-email: "${{ github.actor }}@users.noreply.github.com"
-          git-push-sign-off: true
-          config-file: .terraform-docs.yml
-
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:

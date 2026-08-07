@@ -39,7 +39,7 @@ locals {
 # For generated list of Resources within this module, generate all names
 module "naming" {
   source   = "phx-tim-butters/phxnaming/azurerm"
-  version  = "0.1.4"
+  version  = "0.1.7"
   for_each = local.resources
 
   archetype             = try(each.value.workload, var.archetype)
