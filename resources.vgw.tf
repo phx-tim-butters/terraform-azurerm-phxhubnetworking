@@ -37,8 +37,9 @@ resource "azurerm_key_vault_secret" "lgw" {
 }
 
 module "virtual_network_gateway" {
-  source   = "Azure/avm-ptn-alz-connectivity-hub-and-spoke-vnet/azurerm//modules/virtual-network-gateway"
-  version  = var.module_avm_ptn_alz_connectivity_hub_and_spoke_vnet_version
+  source  = "Azure/avm-ptn-alz-connectivity-hub-and-spoke-vnet/azurerm//modules/virtual-network-gateway"
+  version = var.module_avm_ptn_alz_connectivity_hub_and_spoke_vnet_version
+
   for_each = local.virtual_network_gateways
 
   enable_telemetry = false

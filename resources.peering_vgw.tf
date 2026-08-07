@@ -37,8 +37,9 @@ module "peering_to_hub" {
 }
 
 module "peering_from_hub" {
-  source   = "Azure/avm-res-network-virtualnetwork/azurerm//modules/peering"
-  version  = var.module_avm_res_network_virtualnetwork_version
+  source  = "Azure/avm-res-network-virtualnetwork/azurerm//modules/peering"
+  version = var.module_avm_res_network_virtualnetwork_version
+
   for_each = local.hub_peering_map
 
   name                      = each.value.inbound_name
