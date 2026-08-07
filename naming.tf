@@ -39,11 +39,11 @@ locals {
 # For generated list of Resources within this module, generate all names
 module "naming" {
   source   = "phx-tim-butters/phxnaming/azurerm"
-  version  = "0.1.7"
+  version  = var.module_phx_naming_version
   for_each = local.resources
 
-  archetype             = try(each.value.workload, var.archetype)
-  workload_abbreviation = try(each.value.workload, var.workload_abbreviation)
+  archetype             = try(each.value.archetype, var.archetype)
+  workload_abbreviation = try(each.value.workload_abbreviation, var.workload_abbreviation)
   org_abbreviation      = var.org_abbreviation
   env_abbreviation      = try(each.value.environment, var.deploy_abbreviation)
   structure             = try(each.value.structure, var.structure)

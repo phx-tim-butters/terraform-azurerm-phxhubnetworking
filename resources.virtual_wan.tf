@@ -5,7 +5,7 @@ locals {
 
 module "vwan" {
   source  = "Azure/avm-ptn-alz-connectivity-virtual-wan/azurerm"
-  version = "0.16.1"
+  version = var.module_avm_ptn_alz_connectivity_virtual_wan_version
 
   for_each = local.create_vwan ? var.virtual_wans : {}
 
