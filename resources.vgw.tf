@@ -71,7 +71,7 @@ module "virtual_network_gateway" {
         name              = "pip-${each.value.name}-0${ip_configuration + 1}"
         allocation_method = "Static"
         sku               = "Standard"
-        tags              = null
+        tags              = each.value.tags
         zones             = each.value.zones
       }
     }
