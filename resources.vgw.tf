@@ -65,7 +65,7 @@ module "virtual_network_gateway" {
   ip_configurations = { for ip_configuration in range(each.value.ip_configurations) :
     ip_configuration => {
       ip_configuration_name         = "PIP-${each.value.name}-0${ip_configuration + 1}"
-      apipa_addresses               = null
+      apipa_addresses               = try(each.value.apipa_addresses, [])
       private_ip_address_allocation = "Dynamic"
       public_ip = {
         name              = "pip-${each.value.name}-0${ip_configuration + 1}"
