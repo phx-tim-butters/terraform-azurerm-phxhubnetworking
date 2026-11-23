@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+    paths:
+      - '*.tf'
+      - 'modules/*.tf'
 
   workflow_dispatch:
     inputs:

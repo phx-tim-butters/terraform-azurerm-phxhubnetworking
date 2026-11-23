@@ -2,7 +2,7 @@ variable "module_phx_naming_version" {
   description = "The version of the naming module to use."
   type        = string
   const       = true
-  default     = "0.1.7"
+  default     = "0.1.11"
 }
 
 variable "module_avm_res_network_virtualnetwork_version" {

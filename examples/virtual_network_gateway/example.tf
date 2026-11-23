@@ -47,10 +47,14 @@ locals {
       address_space         = "10.0.1.0/24"
       resource_name         = "01"
       location              = "uksouth"
-      generation            = "Generation1"
+      generation            = "Generation2"
       sku_size              = "VpnGw1AZ"
-      enable_bgp            = false
+      enable_bgp            = true
       active_active_enabled = true
+      apipa_addresses = [
+        "169.254.1.2",
+        "169.254.1.6"
+      ]
       bgp_settings = {
         asn = 65515
       }
@@ -69,7 +73,7 @@ locals {
       ]
       bgp_settings = {
         asn                 = 65001
-        bgp_peering_address = "192.168.10.1"
+        bgp_peering_address = "169.254.1.1"
       }
       //gateway_address = "139.153.0.10"
       gateway_fqdn = "vpn.org.org"
@@ -79,7 +83,37 @@ locals {
         dpd_timeout_seconds = 45
         generate_psk        = false
         shared_key          = "P@ssw0rd1234"
-        enable_bgp          = false
+        enable_bgp          = true
+        ipsec_policy = {
+          dh_group         = "DHGroup14"
+          ike_encryption   = "AES256"
+          ike_integrity    = "SHA256"
+          ipsec_encryption = "AES256"
+          ipsec_integrity  = "SHA256"
+          pfs_group        = "PFS2048"
+          sa_lifetime      = "27000"
+        }
+      }
+    }
+    OnPrem02 = {
+      resource_name   = "OnPrem02"
+      vpn_gateway_key = "uksouth"
+      location        = "uksouth"
+      address_space = [
+      ]
+      bgp_settings = {
+        asn                 = 65001
+        bgp_peering_address = "169.254.1.5"
+      }
+      //gateway_address = "139.153.0.10"
+      gateway_fqdn = "vpn.org.org"
+      connection = {
+        resource_name       = "uksouth_to_onPrem02"
+        type                = "IPsec"
+        dpd_timeout_seconds = 45
+        generate_psk        = false
+        shared_key          = "P@ssw0rd1234"
+        enable_bgp          = true
         ipsec_policy = {
           dh_group         = "DHGroup14"
           ike_encryption   = "AES256"
